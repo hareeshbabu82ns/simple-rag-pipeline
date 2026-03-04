@@ -1,10 +1,19 @@
 import glob
 import json
 import os
+import sys
 from typing import List
+from dotenv import load_dotenv
+
+load_dotenv()
+
+root = os.path.dirname(__file__)
+src_path = os.path.join(root, "src")
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
+
 from rag_pipeline import RAGPipeline
 from create_parser import create_parser
-
 from impl import Datastore, Indexer, Retriever, ResponseGenerator, Evaluator
 
 

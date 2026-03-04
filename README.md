@@ -17,7 +17,6 @@ The RAG Framework lets you:
 
 - **Pipeline (src/rag_pipeline.py):**  
   Orchestrates the process using:
-
   - **Datastore:** Manages embeddings and vector storage.
   - **Indexer:** Processes documents and creates data chunks. Two versions are available—a basic PDF indexer and one using the Docling package.
   - **Retriever:** Searches the datastore to pull relevant document segments.
@@ -34,12 +33,16 @@ The RAG Framework lets you:
 ```bash
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
+
+uv venv
+source venv/bin/activate
 ```
 
 #### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
+uv sync
 ```
 
 #### Configure Environment Variables
@@ -71,6 +74,8 @@ This command resets the datastore, indexes documents, and evaluates the model.
 
 ```bash
 python main.py run
+
+uv python main.py run
 ```
 
 #### Reset the Database

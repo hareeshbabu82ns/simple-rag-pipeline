@@ -3,6 +3,7 @@ from interface.base_datastore import BaseDatastore, DataItem
 import lancedb
 from lancedb.table import Table
 import pyarrow as pa
+import os
 from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor
 
@@ -13,8 +14,10 @@ class Datastore(BaseDatastore):
     DB_TABLE_NAME = "rag-table"
 
     def __init__(self):
-        self.vector_dimensions = 1536
-        self.open_ai_client = OpenAI()
+        self.vector_dimensions = int(os.getenv("EMBEDDING_MODEL_DIMENSIONS", 1536))
+        self.open_ai_client = OpenAI(
+            base_url=os.getenv("OLLAMA_BASE_URL"), api_key=os.getenv("OLLAMA_API_KEY")
+        )
         self.vector_db = lancedb.connect(self.DB_PATH)
         self.table: Table = self._get_table()
 
@@ -42,7 +45,7 @@ class Datastore(BaseDatastore):
     def get_vector(self, content: str) -> List[float]:
         response = self.open_ai_client.embeddings.create(
             input=content,
-            model="text-embedding-3-small",
+            model=os.getenv("EMBEDDING_MODEL", "text-embedding-3-small"),
             dimensions=self.vector_dimensions,
         )
         embeddings = response.data[0].embedding
